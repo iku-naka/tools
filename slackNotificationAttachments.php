@@ -21,7 +21,8 @@ function send_to_slack_attachments($message, $color) {
     // payloadの値としてURLエンコード
     $message_post = "payload=" . urlencode ( $message_json );
 
-    // setting.iniのdry_runがtrueなら、通知を実際には飛ばさない。（テスト用）
+    // curlで送信する
+    //（setting.iniのdry_runがtrueなら、通知を実際には飛ばさない。テスト用）
     if (  !$setting ['dry_run'] ) {
         $ch = curl_init ();
         curl_setopt ( $ch, CURLOPT_URL, $webhook_url );
@@ -41,7 +42,7 @@ function send_to_slack_attachments($message, $color) {
 /*
  * attachmentsを作成する。
  * @param string $message
- * @param string $color ("danger"=赤、"good"=緑、"warning"=黄。他の色も指定可 ex.#439FE0)
+ * @param string $color
  * @return array $attatchements
  */
 function make_attachments($message, $color) {
@@ -50,7 +51,7 @@ function make_attachments($message, $color) {
                     array (
                             // "title" => "checkCalendar",
                             "text" => $message,
-                            "color" => $color, // good:緑 warning:黄色 danger:赤
+                            "color" => $color,
                             "ts" => time () // unix timestamp
                     )
 
